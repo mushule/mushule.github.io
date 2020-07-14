@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, 即使再小的帆也能远航">
+    <meta name="keywords" content="Docker笔记, 即使再小的帆也能远航">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hello World | 即使再小的帆也能远航</title>
+    <title>Docker笔记 | 即使再小的帆也能远航</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -29,7 +29,7 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -308,12 +308,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello World</h1>
+                    <h1 class="description center-align post-title">Docker笔记</h1>
                 </div>
             </div>
         </div>
@@ -458,20 +458,375 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+                <p>[TOC]</p>
+<h2 id="Docker前面笔记"><a href="#Docker前面笔记" class="headerlink" title="Docker前面笔记"></a>Docker<a href="https://blog.csdn.net/weixin_43831049/article/details/106184345" target="_blank" rel="noopener">前面笔记</a></h2><h2 id="数据卷挂载"><a href="#数据卷挂载" class="headerlink" title="数据卷挂载"></a>数据卷挂载</h2><p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705175117085.png" alt="image-20200705175117085"></p>
+<pre class=" language-shell"><code class="language-shell">#开启父容器
+[root@lele home]# docker run -it --name docker01 test/centos:1.0
 
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+#开启子容器
+#--volumes-from 相当于继承的意思
+#父容器必须有挂载的容器卷 ，子容器才能--volumes-from继承父容器，达到数据共享，共享的地方也只能是容器卷里面的内容。
+[root@lele home]# docker run -it --name docker02 --volumes-from docker01 test/centos:01
+</code></pre>
+<blockquote>
+<p>测试</p>
+</blockquote>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705175644796.png" alt="image-20200705175644796"></p>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705175700634.png" alt="image-20200705175700634"></p>
+<p>结论：</p>
+<p>容器之间的配置信息的传递，数据卷容器的生命周期一直持续到没有容器使用为止。</p>
+<p>但是一旦你持久化到了本地，这个时候，本地的数据是不会删除的！</p>
+<h2 id="DockerFile的指令"><a href="#DockerFile的指令" class="headerlink" title="DockerFile的指令"></a>DockerFile的指令</h2><pre class=" language-shell"><code class="language-shell">FROM                # 基础镜像，一切从这里开始构建
+MAINTAINER             # 镜像是谁写的， 姓名+邮箱
+RUN                    # 镜像构建的时候需要运行的命令
+ADD                    # 步骤，tomcat镜像，这个tomcat压缩包！添加内容 添加同目录
+WORKDIR                # 镜像的工作目录
+VOLUME                # 挂载的目录
+EXPOSE                # 保留端口配置
+CMD                    # 指定这个容器启动的时候要运行的命令，只有最后一个会生效，可被替代。
+ENTRYPOINT            # 指定这个容器启动的时候要运行的命令，可以追加命令
+ONBUILD                # 当构建一个被继承 DockerFile 这个时候就会运行ONBUILD的指令，触发指令。
+COPY                # 类似ADD，将我们文件拷贝到镜像中
+ENV                    # 构建的时候设置环境变量！</code></pre>
+<h2 id="Docker网络详解"><a href="#Docker网络详解" class="headerlink" title="Docker网络详解"></a>Docker网络详解</h2><h3 id="理解Docker0"><a href="#理解Docker0" class="headerlink" title="理解Docker0"></a>理解Docker0</h3><pre class=" language-java"><code class="language-java">测试</code></pre>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704171143856.png" alt="image-20200704171143856"></p>
+<p>三个网络</p>
+<pre class=" language-shell"><code class="language-shell"># 问题： docker 是如何处理容器网络访问的？</code></pre>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704171851548.png" alt="image-20200704171851548"></p>
+<pre class=" language-shell"><code class="language-shell">#[root@lele LeLe]# docker run -d -P --name tomcat01 tomcat
 
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+#查看容器的内部网络地址 ip addr 发现容器启动的时候会得到一个 eth0@if159 ip地址，docker分配的
+[root@lele LeLe]# docker exec -it tomcat01 ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+158: eth0@if159: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
 
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+#思考 linux 能不能ping 通容器内部
+[root@lele LeLe]# ping 172.17.0.2
+PING 172.17.0.2 (172.17.0.2) 56(84) bytes of data.
+64 bytes from 172.17.0.2: icmp_seq=1 ttl=64 time=0.092 ms
+64 bytes from 172.17.0.2: icmp_seq=2 ttl=64 time=0.065 ms
 
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+#linux 可以ping通 docker 容器内部</code></pre>
+<blockquote>
+<p>原理</p>
+</blockquote>
+<p>1.我们没启动一个docker容器，docker就会给docker容器分配一个ip，我们只要安装了docker，就会有一个网卡docker0桥接模式，使用的技术是evth-pair技术!</p>
+<p>再次测试ip addr</p>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704173415610.png" alt="image-20200704173415610"></p>
+<p>2.在启动一个容器测试，发现了又多了一对网卡</p>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704173543147.png" alt="image-20200704173543147"></p>
+<pre class=" language-shell"><code class="language-shell"># 我们发现这个容器带来网卡，都是一对对的
+# evth-pair 就是一对的虚拟设备接口，他们都是成对出现的，一段连着协议，一段彼此相连
+# 正因为有这个特性，evth-pair 充当一个桥梁，连接各种虚拟网络设备的
+# OpenStac，Docker容器之间的连接，ovs的连接，都是使用 evth-pair 技术</code></pre>
+<p>3.我们来测试下tomcat01和tomcat02是否可以ping通</p>
+<pre class=" language-shell"><code class="language-shell">[root@lele LeLe]# docker exec -it tomcat02 ping 172.17.0.2
+PING 172.17.0.2 (172.17.0.2) 56(84) bytes of data.
+64 bytes from 172.17.0.2: icmp_seq=1 ttl=64 time=0.109 ms
+64 bytes from 172.17.0.2: icmp_seq=2 ttl=64 time=0.082 ms
 
+#结论: 容器和容器之间是可以互相ping通的</code></pre>
+<p>绘制一个网络模型图：</p>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704175225662.png" alt="image-20200704175225662"></p>
+<p>结论：tomcat01 和tomcat02 是公用的一个路由器，docker0。</p>
+<p>所有的容器不指定网络的情况下，都是docker0路由的，docker会给我们的容器分配一个默认的可用ip</p>
+<blockquote>
+<p>小结</p>
+</blockquote>
+<p>Docker使用的是Linux的桥接，宿主机是一个Docker容器的网桥，docker0</p>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704180112884.png" alt="image-20200704180112884"></p>
+<p>Docker中的所有的网络接口都是虚拟的，虚拟的转发效率高!(内网传递文件!)</p>
+<p>只要容器删除，对应网桥一对就没了!</p>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704182137254.png" alt="image-20200704182137254"></p>
+<h3 id="–link"><a href="#–link" class="headerlink" title="–link"></a>–link</h3><blockquote>
+<p>思考一个场景，我们编写了一个微服务，database url=ip:, 项目不重启，数据库ip换掉了，我们希望可以处理这个问题，可以用名字来进行访问容器?</p>
+</blockquote>
+<pre class=" language-shell"><code class="language-shell"># 如何解决呢?
+[root@lele LeLe]# docker exec -it tomcat02 ping tomcat01
+ping: tomcat01: Name or service not known
+
+# 通过--link 既可以解决了网络连通问题
+[root@lele LeLe]# docker run -d -P --name tomcat03 --link tomcat02 tomcat
+7be48de46252de2c1b79bf13e156ef393fbb4d159f9c636cf84c5b7a977f3f4f
+[root@lele LeLe]# docker exec -it tomcat03 ping tomcat02
+PING tomcat02 (172.17.0.3) 56(84) bytes of data.
+64 bytes from tomcat02 (172.17.0.3): icmp_seq=1 ttl=64 time=0.130 ms
+64 bytes from tomcat02 (172.17.0.3): icmp_seq=2 ttl=64 time=0.063 ms
+</code></pre>
+<p>探究：inspect</p>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704182548237.png" alt="image-20200704182548237"></p>
+<p>其实这个tomcat03 就是在本地配置了tomcat02的配置</p>
+<pre class=" language-shell"><code class="language-shell">#查看hosts 配置，在这里原理发现
+root@7be48de46252:/usr/local/tomcat# cat /etc/hosts
+127.0.0.1    localhost
+::1    localhost ip6-localhost ip6-loopback
+fe00::0    ip6-localnet
+ff00::0    ip6-mcastprefix
+ff02::1    ip6-allnodes
+ff02::2    ip6-allrouters
+172.17.0.3    tomcat02 10cdd2aad84e
+172.17.0.4    7be48de46252
+</code></pre>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704183808651.png" alt="image-20200704183808651"></p>
+<p>本质探究：–link就是我们在hosts配置中增加了一个 tomcat02 通过名字也可以ping通  ，10cdd2aad84e像这种就是通过ip来ping</p>
+<p>我们现在玩Docker 已经不建议使用 –link了!</p>
+<p>自定义网络!不适合docker0!</p>
+<p>docker0问题：他不支持容器名连接访问!</p>
+<h3 id="自定义网络"><a href="#自定义网络" class="headerlink" title="自定义网络"></a>自定义网络</h3><blockquote>
+<p>查看所有的docker网络</p>
+</blockquote>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704192407432.png" alt="image-20200704192407432"></p>
+<p><strong>网络模式</strong></p>
+<p>bridge : 桥接 docker(默认，自己创建也使用bridge 模式)</p>
+<p>none : 不配置网络</p>
+<p>host : 和数组及共享网络</p>
+<p>container : 容器网络连通!(用得少!局限很大)</p>
+<p><strong>测试</strong></p>
+<pre class=" language-shell"><code class="language-shell"># 我们直接启动命令 --net bridge，而这个就是我们的docker0
+docker run -d -P --name tomcat01 --net bridge tomcat
+
+# docker0 特点: 默认，域名不能访问 --link可以打通连接
+
+# --driver bridge 桥接
+# --subnet 子网地址
+# --gateway 网关地址
+#我们可以自定一个网络
+[root@lele /]# docker network create --driver bridge --subnet 192.168.0.0/16 --gateway 192.168.0.1 mynet
+b58986a8e319c4be83e9c3ce37c3eb947d94972fd652bea34e87d2a7ed8b1b93
+[root@lele /]# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+c7567ec83458        bridge              bridge              local
+df32f0ff36e8        host                host                local
+b58986a8e319        mynet               bridge              local
+4fb1b575c678        none                null                local
+</code></pre>
+<p>我们自己的网络也就创建好了!</p>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704194318271.png" alt="image-20200704194318271"></p>
+<pre class=" language-shell"><code class="language-shell">[root@lele /]# docker run -d -P --name tomcat-net-01 --net mynet tomcat
+cad3b4f2bb639fa621b09a883c83fdcdcd8b17c52cc7210cb0497184aac26ec0
+[root@lele /]# docker run -d -P --name tomcat-net-02 --net mynet tomcat
+8c21b36fb33786f19d29dcefe0811eb5c54e45a251c0dc2594fea693cff53378
+[root@lele /]# docker network inspect mynet
+[
+    {
+        "Name": "mynet",
+        "Id": "b58986a8e319c4be83e9c3ce37c3eb947d94972fd652bea34e87d2a7ed8b1b93",
+        "Created": "2020-07-04T19:37:38.750077885+08:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "192.168.0.0/16",
+                    "Gateway": "192.168.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "8c21b36fb33786f19d29dcefe0811eb5c54e45a251c0dc2594fea693cff53378": {
+                "Name": "tomcat-net-02",
+                "EndpointID": "fc3abefe24fb2de0add865249d409b4333fddf0b0bd0b630243624d19eaa2e34",
+                "MacAddress": "02:42:c0:a8:00:03",
+                "IPv4Address": "192.168.0.3/16",
+                "IPv6Address": ""
+            },
+            "cad3b4f2bb639fa621b09a883c83fdcdcd8b17c52cc7210cb0497184aac26ec0": {
+                "Name": "tomcat-net-01",
+                "EndpointID": "39849a96f23101c872ba63e94ceee9b8a90d5314128bfe033859c8a253c80057",
+                "MacAddress": "02:42:c0:a8:00:02",
+                "IPv4Address": "192.168.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {}
+    }
+]
+
+# 再次测试ping链接
+[root@lele /]# docker exec -it tomcat-net-01 ping 192.168.0.3
+PING 192.168.0.3 (192.168.0.3) 56(84) bytes of data.
+64 bytes from 192.168.0.3: icmp_seq=1 ttl=64 time=0.136 ms
+64 bytes from 192.168.0.3: icmp_seq=2 ttl=64 time=0.093 ms
+64 bytes from 192.168.0.3: icmp_seq=3 ttl=64 time=0.083 ms
+^C
+--- 192.168.0.3 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2ms
+rtt min/avg/max/mdev = 0.083/0.104/0.136/0.023 ms
+
+# 现在不使用 --link 也可以ping名字了
+[root@lele /]# docker exec -it tomcat-net-01 ping tomcat-net-02
+PING tomcat-net-02 (192.168.0.3) 56(84) bytes of data.
+64 bytes from tomcat-net-02.mynet (192.168.0.3): icmp_seq=1 ttl=64 time=0.064 ms
+64 bytes from tomcat-net-02.mynet (192.168.0.3): icmp_seq=2 ttl=64 time=0.089 ms
+^C
+--- tomcat-net-02 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1ms
+rtt min/avg/max/mdev = 0.064/0.076/0.089/0.015 ms
+
+</code></pre>
+<p>我们自定义的网络docker都已经帮我们维护好了对应的关系，推荐我们平时这样使用网络!</p>
+<p>好处:</p>
+<p>redis- 不同的集群使用不同的网络，保证集群是安全和健康的</p>
+<p>mysql-不同的集群使用不同的网络，保证集群是安全和健康的</p>
+<h3 id="网络连通"><a href="#网络连通" class="headerlink" title="网络连通"></a>网络连通</h3><blockquote>
+<p>绘图理解</p>
+</blockquote>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705110350552.png" alt="image-20200705110350552"></p>
+<blockquote>
+<p>Connect a container to a net work 连接一个容器到网络</p>
+</blockquote>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705104505822.png" alt="image-20200705104505822"></p>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705104527736.png" alt="image-20200705104527736"></p>
+<pre class=" language-shell"><code class="language-shell"># mynet 自定定义的网络
+# tomcat01 docker0里面的容器
+# 把Docker0里面的tomcat01容器 连接到mynet网络里面，这样tomcat01就可ping mynet里面的地址了。
+[root@lele home]# docker network connect mynet tomcat01
+
+# 测试打通 tomcat01 -mynet
+
+# 连通之后就是将 tomcat01 放到了 mynet网络下
+
+# 一个容器两个ip地址
+
+#阿里云服务: 公网ip 私网ip</code></pre>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705105429106.png" alt="image-20200705105429106"></p>
+<pre class=" language-shell"><code class="language-shell">#因为设置了通过容器连接网络，所以01是连通的
+[root@lele ~]# docker exec -it tomcat01 ping 192.168.0.2
+PING 192.168.0.2 (192.168.0.2) 56(84) bytes of data.
+64 bytes from 192.168.0.2: icmp_seq=1 ttl=64 time=0.126 ms
+64 bytes from 192.168.0.2: icmp_seq=2 ttl=64 time=0.100 ms
+
+#反之，02没有设置，所有连接不通
+[root@lele ~]# docker exec -it tomcat02 ping 192.168.0.2
+Error: No such container: tomcat02
+</code></pre>
+<p>结论: 假设要跨网络操作别人，就需要使用docker network connect 连通!</p>
+<h3 id="实战-部署Redis集群"><a href="#实战-部署Redis集群" class="headerlink" title="实战:部署Redis集群"></a>实战:部署Redis集群</h3><blockquote>
+<p>三主三从，加入主机r-m3停掉了，从机就需要顶替上去</p>
+</blockquote>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705110810240.png" alt="image-20200705110810240"></p>
+<p>​        shell脚本</p>
+<pre class=" language-shell"><code class="language-shell">#创建网卡
+docker network create redis --subnet 172.38.0.0/16
+
+#通过脚本创建六个redis配置
+for port in $(seq 1 6); \
+do \
+mkdir -p /home/redis-cluster/redis-${port}/conf
+touch /home/redis-cluster/redis-${port}/conf/redis.conf
+cat << EOF >>/home/redis-cluster/redis-${port}/conf/redis.conf
+port 6379
+bind 0.0.0.0
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 5000
+cluster-announce-ip 172.38.0.1${port}
+cluster-announce-port 6379
+cluster-announce-bus-port 16379
+appendonly yes
+EOF
+done
+
+# 开启集群
+docker run -p 6371:6379 -p 16371:16379 --name redis-1 \
+-v /home/redis-cluster/redis-1/data:/data \
+-v /home/redis-cluster/redis-1/conf/redis.conf:/etc/redis/redis.conf \
+-d --net redis --ip 172.38.0.11 redis:5.0.8-alpine3.11 redis-server /etc/redis/redis.conf
+
+docker run -p 6376:6379 -p 16376:16379 --name redis-6 \
+-v /home/redis-cluster/redis-6/data:/data \
+-v /home/redis-cluster/redis-6/conf/redis.conf:/etc/redis/redis.conf \
+-d --net redis --ip 172.38.0.16 redis:5.0.8-alpine3.11 redis-server /etc/redis/redis.conf
+
+# 进入redis-1的容器
+[root@lele redis-cluster]# docker exec -it redis-1 /bin/sh
+
+# 创建集群配置
+/data # redis-cli --cluster create 172.38.0.11:6379 172.38.0.12:6379 172.38.0.13:6379 172.38.0.14:6379 172.38.0.15:6379 172.38.0.16:6379 --clu
+ster-replicas 1
+>>> Performing hash slots allocation on 6 nodes...
+Master[0] -> Slots 0 - 5460
+Master[1] -> Slots 5461 - 10922
+Master[2] -> Slots 10923 - 16383
+Adding replica 172.38.0.15:6379 to 172.38.0.11:6379
+Adding replica 172.38.0.16:6379 to 172.38.0.12:6379
+Adding replica 172.38.0.14:6379 to 172.38.0.13:6379
+M: da32ed29f8046d767427f2fb57937e6a6f8fadec 172.38.0.11:6379
+   slots:[0-5460] (5461 slots) master
+M: 825fb8d6b06068f62745e01c797d83e836f91feb 172.38.0.12:6379
+   slots:[5461-10922] (5462 slots) master
+M: dfe2d4e5e7b6abc005b13a66ccdc12b5954b27c5 172.38.0.13:6379
+   slots:[10923-16383] (5461 slots) master
+S: 4620497aa894cf2fe55a9d5211a09dfc43fb01a9 172.38.0.14:6379
+   replicates dfe2d4e5e7b6abc005b13a66ccdc12b5954b27c5
+S: 73722e254fe02d6aa0ded4175d09ef91a7d697c0 172.38.0.15:6379
+   replicates da32ed29f8046d767427f2fb57937e6a6f8fadec
+S: bfd97c50b9cc404d34ed4f55a21259fa66f6a7d3 172.38.0.16:6379
+   replicates 825fb8d6b06068f62745e01c797d83e836f91feb
+Can I set the above configuration? (type 'yes' to accept): yes
+>>> Nodes configuration updated
+>>> Assign a different config epoch to each node
+>>> Sending CLUSTER MEET messages to join the cluster
+Waiting for the cluster to join
+...
+>>> Performing Cluster Check (using node 172.38.0.11:6379)
+M: da32ed29f8046d767427f2fb57937e6a6f8fadec 172.38.0.11:6379
+   slots:[0-5460] (5461 slots) master
+   1 additional replica(s)
+S: bfd97c50b9cc404d34ed4f55a21259fa66f6a7d3 172.38.0.16:6379
+   slots: (0 slots) slave
+   replicates 825fb8d6b06068f62745e01c797d83e836f91feb
+M: dfe2d4e5e7b6abc005b13a66ccdc12b5954b27c5 172.38.0.13:6379
+   slots:[10923-16383] (5461 slots) master
+   1 additional replica(s)
+S: 73722e254fe02d6aa0ded4175d09ef91a7d697c0 172.38.0.15:6379
+   slots: (0 slots) slave
+   replicates da32ed29f8046d767427f2fb57937e6a6f8fadec
+M: 825fb8d6b06068f62745e01c797d83e836f91feb 172.38.0.12:6379
+   slots:[5461-10922] (5462 slots) master
+   1 additional replica(s)
+S: 4620497aa894cf2fe55a9d5211a09dfc43fb01a9 172.38.0.14:6379
+   slots: (0 slots) slave
+   replicates dfe2d4e5e7b6abc005b13a66ccdc12b5954b27c5
+[OK] All nodes agree about slots configuration.
+>>> Check for open slots...
+>>> Check slots coverage...
+[OK] All 16384 slots covered.
+</code></pre>
+<p>docker搭建redis集群完成</p>
+<blockquote>
+<p>主机停掉，从机自动配置上去代替主机。</p>
+</blockquote>
+<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705114455785.png" alt="image-20200705114455785"></p>
+<p>我们使用了docker之后，所有的技术都会慢慢的变得简单起来。</p>
+<h3 id="SpringBoot微服务打包Docker镜像"><a href="#SpringBoot微服务打包Docker镜像" class="headerlink" title="SpringBoot微服务打包Docker镜像"></a>SpringBoot微服务打包Docker镜像</h3><p>1.构建springboot项目</p>
+<p>2.打包应用</p>
+<p>3.编写dockerfile</p>
+<p>4.构建镜像</p>
+<p>5.发布运行</p>
+<p>以后我们使用了Docker之后，给别人交付的就是一个镜像即可。</p>
+<p>docker构建镜像一键部署项目</p>
+<p>预告：如果有很多镜像，？？100个镜像？</p>
+<p>企业级别开发就需要用到下面技术</p>
+<p>未完待续….</p>
+<h3 id="Docker-Compose"><a href="#Docker-Compose" class="headerlink" title="Docker Compose"></a>Docker Compose</h3><h3 id="Docker-Swarm"><a href="#Docker-Swarm" class="headerlink" title="Docker Swarm"></a>Docker Swarm</h3><h3 id="CI-CD之Jenkins"><a href="#CI-CD之Jenkins" class="headerlink" title="CI/CD之Jenkins"></a>CI/CD之Jenkins</h3>
             </div>
             <hr/>
 
@@ -496,7 +851,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://mushule.github.io/2020/07/14/hello-world/">https://mushule.github.io/2020/07/14/hello-world/</a>
+                    <a href="https://mushule.github.io/2020/07/14/Docker%E7%AC%94%E8%AE%B0/">https://mushule.github.io/2020/07/14/Docker%E7%AC%94%E8%AE%B0/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -704,19 +1059,25 @@
                 <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/2020/07/14/hello-world/">
+                <a href="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="Docker笔记">
                         
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">Docker笔记</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex
+                            [TOC]
+Docker前面笔记数据卷挂载
+#开启父容器
+[root@lele home]# docker run -it --name docker01 test/centos:1.0
+
+#开启子容器
+#--volumes-from 相当
                         
                     </div>
                     <div class="publish-info">
@@ -742,19 +1103,25 @@
                 本篇&nbsp;<i class="far fa-dot-circle"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/14/hello-world/">
+                <a href="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="Docker笔记">
                         
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">Docker笔记</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex
+                            [TOC]
+Docker前面笔记数据卷挂载
+#开启父容器
+[root@lele home]# docker run -it --name docker01 test/centos:1.0
+
+#开启子容器
+#--volumes-from 相当
                         
                     </div>
                     <div class="publish-info">
@@ -945,7 +1312,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
         <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
                    server="netease"
                    type="playlist"
-                   id="503838841"
+                   id="2332465784"
                    fixed='true'
                    autoplay='false'
                    theme='#42b983'
@@ -1000,7 +1367,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
 
-    <a href="mailto:1181062873@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+    <a href="mailto:2252950365@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
         <i class="fas fa-envelope-open"></i>
     </a>
 
@@ -1010,7 +1377,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
 
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2252950365" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2252950365" data-position="top" data-delay="50">
         <i class="fab fa-qq"></i>
     </a>
 
