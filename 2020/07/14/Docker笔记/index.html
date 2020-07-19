@@ -29,7 +29,7 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 
 <body>
@@ -459,8 +459,8 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>[TOC]</p>
-<h2 id="Docker前面笔记"><a href="#Docker前面笔记" class="headerlink" title="Docker前面笔记"></a>Docker<a href="https://blog.csdn.net/weixin_43831049/article/details/106184345" target="_blank" rel="noopener">前面笔记</a></h2><h2 id="数据卷挂载"><a href="#数据卷挂载" class="headerlink" title="数据卷挂载"></a>数据卷挂载</h2><p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705175117085.png" alt="image-20200705175117085"></p>
-<pre class=" language-shell"><code class="language-shell">#开启父容器
+<h2 id="Docker前面笔记"><a href="#Docker前面笔记" class="headerlink" title="Docker前面笔记"></a>Docker<a href="https://blog.csdn.net/weixin_43831049/article/details/106184345" target="_blank" rel="noopener">前面笔记</a></h2><h2 id="数据卷挂载"><a href="#数据卷挂载" class="headerlink" title="数据卷挂载"></a>数据卷挂载</h2><p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200705175117085.png" alt="image-20200705175117085"></p>
+<pre><code class="shell">#开启父容器
 [root@lele home]# docker run -it --name docker01 test/centos:1.0
 
 #开启子容器
@@ -471,12 +471,12 @@
 <blockquote>
 <p>测试</p>
 </blockquote>
-<p><img src="docker%E5%9B%BE%E7%89%87/1.png" alt=""></p>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705175700634.png" alt="image-20200705175700634"></p>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/1.png" alt></p>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200705175700634.png" alt="image-20200705175700634"></p>
 <p>结论：</p>
 <p>容器之间的配置信息的传递，数据卷容器的生命周期一直持续到没有容器使用为止。</p>
 <p>但是一旦你持久化到了本地，这个时候，本地的数据是不会删除的！</p>
-<h2 id="DockerFile的指令"><a href="#DockerFile的指令" class="headerlink" title="DockerFile的指令"></a>DockerFile的指令</h2><pre class=" language-shell"><code class="language-shell">FROM                # 基础镜像，一切从这里开始构建
+<h2 id="DockerFile的指令"><a href="#DockerFile的指令" class="headerlink" title="DockerFile的指令"></a>DockerFile的指令</h2><pre><code class="shell">FROM                # 基础镜像，一切从这里开始构建
 MAINTAINER             # 镜像是谁写的， 姓名+邮箱
 RUN                    # 镜像构建的时候需要运行的命令
 ADD                    # 步骤，tomcat镜像，这个tomcat压缩包！添加内容 添加同目录
@@ -488,20 +488,20 @@ ENTRYPOINT            # 指定这个容器启动的时候要运行的命令，�
 ONBUILD                # 当构建一个被继承 DockerFile 这个时候就会运行ONBUILD的指令，触发指令。
 COPY                # 类似ADD，将我们文件拷贝到镜像中
 ENV                    # 构建的时候设置环境变量！</code></pre>
-<h2 id="Docker网络详解"><a href="#Docker网络详解" class="headerlink" title="Docker网络详解"></a>Docker网络详解</h2><h3 id="理解Docker0"><a href="#理解Docker0" class="headerlink" title="理解Docker0"></a>理解Docker0</h3><pre class=" language-java"><code class="language-java">测试</code></pre>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704171143856.png" alt="image-20200704171143856"></p>
+<h2 id="Docker网络详解"><a href="#Docker网络详解" class="headerlink" title="Docker网络详解"></a>Docker网络详解</h2><h3 id="理解Docker0"><a href="#理解Docker0" class="headerlink" title="理解Docker0"></a>理解Docker0</h3><pre><code class="java">测试</code></pre>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200704171143856.png" alt="image-20200704171143856"></p>
 <p>三个网络</p>
-<pre class=" language-shell"><code class="language-shell"># 问题： docker 是如何处理容器网络访问的？</code></pre>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704171851548.png" alt="image-20200704171851548"></p>
-<pre class=" language-shell"><code class="language-shell">#[root@lele LeLe]# docker run -d -P --name tomcat01 tomcat
+<pre><code class="shell"># 问题： docker 是如何处理容器网络访问的？</code></pre>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200704171851548.png" alt="image-20200704171851548"></p>
+<pre><code class="shell">#[root@lele LeLe]# docker run -d -P --name tomcat01 tomcat
 
 #查看容器的内部网络地址 ip addr 发现容器启动的时候会得到一个 eth0@if159 ip地址，docker分配的
 [root@lele LeLe]# docker exec -it tomcat01 ip addr
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-158: eth0@if159: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+158: eth0@if159: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default 
     link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
     inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
        valid_lft forever preferred_lft forever
@@ -518,36 +518,36 @@ PING 172.17.0.2 (172.17.0.2) 56(84) bytes of data.
 </blockquote>
 <p>1.我们没启动一个docker容器，docker就会给docker容器分配一个ip，我们只要安装了docker，就会有一个网卡docker0桥接模式，使用的技术是evth-pair技术!</p>
 <p>再次测试ip addr</p>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704173415610.png" alt="image-20200704173415610"></p>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200704173415610.png" alt="image-20200704173415610"></p>
 <p>2.在启动一个容器测试，发现了又多了一对网卡</p>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704173543147.png" alt="image-20200704173543147"></p>
-<pre class=" language-shell"><code class="language-shell"># 我们发现这个容器带来网卡，都是一对对的
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200704173543147.png" alt="image-20200704173543147"></p>
+<pre><code class="shell"># 我们发现这个容器带来网卡，都是一对对的
 # evth-pair 就是一对的虚拟设备接口，他们都是成对出现的，一段连着协议，一段彼此相连
 # 正因为有这个特性，evth-pair 充当一个桥梁，连接各种虚拟网络设备的
 # OpenStac，Docker容器之间的连接，ovs的连接，都是使用 evth-pair 技术</code></pre>
 <p>3.我们来测试下tomcat01和tomcat02是否可以ping通</p>
-<pre class=" language-shell"><code class="language-shell">[root@lele LeLe]# docker exec -it tomcat02 ping 172.17.0.2
+<pre><code class="shell">[root@lele LeLe]# docker exec -it tomcat02 ping 172.17.0.2
 PING 172.17.0.2 (172.17.0.2) 56(84) bytes of data.
 64 bytes from 172.17.0.2: icmp_seq=1 ttl=64 time=0.109 ms
 64 bytes from 172.17.0.2: icmp_seq=2 ttl=64 time=0.082 ms
 
 #结论: 容器和容器之间是可以互相ping通的</code></pre>
 <p>绘制一个网络模型图：</p>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704175225662.png" alt="image-20200704175225662"></p>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200704175225662.png" alt="image-20200704175225662"></p>
 <p>结论：tomcat01 和tomcat02 是公用的一个路由器，docker0。</p>
 <p>所有的容器不指定网络的情况下，都是docker0路由的，docker会给我们的容器分配一个默认的可用ip</p>
 <blockquote>
 <p>小结</p>
 </blockquote>
 <p>Docker使用的是Linux的桥接，宿主机是一个Docker容器的网桥，docker0</p>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704180112884.png" alt="image-20200704180112884"></p>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200704180112884.png" alt="image-20200704180112884"></p>
 <p>Docker中的所有的网络接口都是虚拟的，虚拟的转发效率高!(内网传递文件!)</p>
 <p>只要容器删除，对应网桥一对就没了!</p>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704182137254.png" alt="image-20200704182137254"></p>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200704182137254.png" alt="image-20200704182137254"></p>
 <h3 id="–link"><a href="#–link" class="headerlink" title="–link"></a>–link</h3><blockquote>
 <p>思考一个场景，我们编写了一个微服务，database url=ip:, 项目不重启，数据库ip换掉了，我们希望可以处理这个问题，可以用名字来进行访问容器?</p>
 </blockquote>
-<pre class=" language-shell"><code class="language-shell"># 如何解决呢?
+<pre><code class="shell"># 如何解决呢?
 [root@lele LeLe]# docker exec -it tomcat02 ping tomcat01
 ping: tomcat01: Name or service not known
 
@@ -560,9 +560,9 @@ PING tomcat02 (172.17.0.3) 56(84) bytes of data.
 64 bytes from tomcat02 (172.17.0.3): icmp_seq=2 ttl=64 time=0.063 ms
 </code></pre>
 <p>探究：inspect</p>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704182548237.png" alt="image-20200704182548237"></p>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200704182548237.png" alt="image-20200704182548237"></p>
 <p>其实这个tomcat03 就是在本地配置了tomcat02的配置</p>
-<pre class=" language-shell"><code class="language-shell">#查看hosts 配置，在这里原理发现
+<pre><code class="shell">#查看hosts 配置，在这里原理发现
 root@7be48de46252:/usr/local/tomcat# cat /etc/hosts
 127.0.0.1    localhost
 ::1    localhost ip6-localhost ip6-loopback
@@ -573,7 +573,7 @@ ff02::2    ip6-allrouters
 172.17.0.3    tomcat02 10cdd2aad84e
 172.17.0.4    7be48de46252
 </code></pre>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704183808651.png" alt="image-20200704183808651"></p>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200704183808651.png" alt="image-20200704183808651"></p>
 <p>本质探究：–link就是我们在hosts配置中增加了一个 tomcat02 通过名字也可以ping通  ，10cdd2aad84e像这种就是通过ip来ping</p>
 <p>我们现在玩Docker 已经不建议使用 –link了!</p>
 <p>自定义网络!不适合docker0!</p>
@@ -581,14 +581,14 @@ ff02::2    ip6-allrouters
 <h3 id="自定义网络"><a href="#自定义网络" class="headerlink" title="自定义网络"></a>自定义网络</h3><blockquote>
 <p>查看所有的docker网络</p>
 </blockquote>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704192407432.png" alt="image-20200704192407432"></p>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200704192407432.png" alt="image-20200704192407432"></p>
 <p><strong>网络模式</strong></p>
 <p>bridge : 桥接 docker(默认，自己创建也使用bridge 模式)</p>
 <p>none : 不配置网络</p>
 <p>host : 和数组及共享网络</p>
 <p>container : 容器网络连通!(用得少!局限很大)</p>
 <p><strong>测试</strong></p>
-<pre class=" language-shell"><code class="language-shell"># 我们直接启动命令 --net bridge，而这个就是我们的docker0
+<pre><code class="shell"># 我们直接启动命令 --net bridge，而这个就是我们的docker0
 docker run -d -P --name tomcat01 --net bridge tomcat
 
 # docker0 特点: 默认，域名不能访问 --link可以打通连接
@@ -607,55 +607,55 @@ b58986a8e319        mynet               bridge              local
 4fb1b575c678        none                null                local
 </code></pre>
 <p>我们自己的网络也就创建好了!</p>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200704194318271.png" alt="image-20200704194318271"></p>
-<pre class=" language-shell"><code class="language-shell">[root@lele /]# docker run -d -P --name tomcat-net-01 --net mynet tomcat
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200704194318271.png" alt="image-20200704194318271"></p>
+<pre><code class="shell">[root@lele /]# docker run -d -P --name tomcat-net-01 --net mynet tomcat
 cad3b4f2bb639fa621b09a883c83fdcdcd8b17c52cc7210cb0497184aac26ec0
 [root@lele /]# docker run -d -P --name tomcat-net-02 --net mynet tomcat
 8c21b36fb33786f19d29dcefe0811eb5c54e45a251c0dc2594fea693cff53378
 [root@lele /]# docker network inspect mynet
 [
     {
-        "Name": "mynet",
-        "Id": "b58986a8e319c4be83e9c3ce37c3eb947d94972fd652bea34e87d2a7ed8b1b93",
-        "Created": "2020-07-04T19:37:38.750077885+08:00",
-        "Scope": "local",
-        "Driver": "bridge",
-        "EnableIPv6": false,
-        "IPAM": {
-            "Driver": "default",
-            "Options": {},
-            "Config": [
+        &quot;Name&quot;: &quot;mynet&quot;,
+        &quot;Id&quot;: &quot;b58986a8e319c4be83e9c3ce37c3eb947d94972fd652bea34e87d2a7ed8b1b93&quot;,
+        &quot;Created&quot;: &quot;2020-07-04T19:37:38.750077885+08:00&quot;,
+        &quot;Scope&quot;: &quot;local&quot;,
+        &quot;Driver&quot;: &quot;bridge&quot;,
+        &quot;EnableIPv6&quot;: false,
+        &quot;IPAM&quot;: {
+            &quot;Driver&quot;: &quot;default&quot;,
+            &quot;Options&quot;: {},
+            &quot;Config&quot;: [
                 {
-                    "Subnet": "192.168.0.0/16",
-                    "Gateway": "192.168.0.1"
+                    &quot;Subnet&quot;: &quot;192.168.0.0/16&quot;,
+                    &quot;Gateway&quot;: &quot;192.168.0.1&quot;
                 }
             ]
         },
-        "Internal": false,
-        "Attachable": false,
-        "Ingress": false,
-        "ConfigFrom": {
-            "Network": ""
+        &quot;Internal&quot;: false,
+        &quot;Attachable&quot;: false,
+        &quot;Ingress&quot;: false,
+        &quot;ConfigFrom&quot;: {
+            &quot;Network&quot;: &quot;&quot;
         },
-        "ConfigOnly": false,
-        "Containers": {
-            "8c21b36fb33786f19d29dcefe0811eb5c54e45a251c0dc2594fea693cff53378": {
-                "Name": "tomcat-net-02",
-                "EndpointID": "fc3abefe24fb2de0add865249d409b4333fddf0b0bd0b630243624d19eaa2e34",
-                "MacAddress": "02:42:c0:a8:00:03",
-                "IPv4Address": "192.168.0.3/16",
-                "IPv6Address": ""
+        &quot;ConfigOnly&quot;: false,
+        &quot;Containers&quot;: {
+            &quot;8c21b36fb33786f19d29dcefe0811eb5c54e45a251c0dc2594fea693cff53378&quot;: {
+                &quot;Name&quot;: &quot;tomcat-net-02&quot;,
+                &quot;EndpointID&quot;: &quot;fc3abefe24fb2de0add865249d409b4333fddf0b0bd0b630243624d19eaa2e34&quot;,
+                &quot;MacAddress&quot;: &quot;02:42:c0:a8:00:03&quot;,
+                &quot;IPv4Address&quot;: &quot;192.168.0.3/16&quot;,
+                &quot;IPv6Address&quot;: &quot;&quot;
             },
-            "cad3b4f2bb639fa621b09a883c83fdcdcd8b17c52cc7210cb0497184aac26ec0": {
-                "Name": "tomcat-net-01",
-                "EndpointID": "39849a96f23101c872ba63e94ceee9b8a90d5314128bfe033859c8a253c80057",
-                "MacAddress": "02:42:c0:a8:00:02",
-                "IPv4Address": "192.168.0.2/16",
-                "IPv6Address": ""
+            &quot;cad3b4f2bb639fa621b09a883c83fdcdcd8b17c52cc7210cb0497184aac26ec0&quot;: {
+                &quot;Name&quot;: &quot;tomcat-net-01&quot;,
+                &quot;EndpointID&quot;: &quot;39849a96f23101c872ba63e94ceee9b8a90d5314128bfe033859c8a253c80057&quot;,
+                &quot;MacAddress&quot;: &quot;02:42:c0:a8:00:02&quot;,
+                &quot;IPv4Address&quot;: &quot;192.168.0.2/16&quot;,
+                &quot;IPv6Address&quot;: &quot;&quot;
             }
         },
-        "Options": {},
-        "Labels": {}
+        &quot;Options&quot;: {},
+        &quot;Labels&quot;: {}
     }
 ]
 
@@ -688,13 +688,13 @@ rtt min/avg/max/mdev = 0.064/0.076/0.089/0.015 ms
 <h3 id="网络连通"><a href="#网络连通" class="headerlink" title="网络连通"></a>网络连通</h3><blockquote>
 <p>绘图理解</p>
 </blockquote>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705110350552.png" alt="image-20200705110350552"></p>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200705110350552.png" alt="image-20200705110350552"></p>
 <blockquote>
 <p>Connect a container to a net work 连接一个容器到网络</p>
 </blockquote>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705104505822.png" alt="image-20200705104505822"></p>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705104527736.png" alt="image-20200705104527736"></p>
-<pre class=" language-shell"><code class="language-shell"># mynet 自定定义的网络
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200705104505822.png" alt="image-20200705104505822"></p>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200705104527736.png" alt="image-20200705104527736"></p>
+<pre><code class="shell"># mynet 自定定义的网络
 # tomcat01 docker0里面的容器
 # 把Docker0里面的tomcat01容器 连接到mynet网络里面，这样tomcat01就可ping mynet里面的地址了。
 [root@lele home]# docker network connect mynet tomcat01
@@ -706,8 +706,8 @@ rtt min/avg/max/mdev = 0.064/0.076/0.089/0.015 ms
 # 一个容器两个ip地址
 
 #阿里云服务: 公网ip 私网ip</code></pre>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705105429106.png" alt="image-20200705105429106"></p>
-<pre class=" language-shell"><code class="language-shell">#因为设置了通过容器连接网络，所以01是连通的
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200705105429106.png" alt="image-20200705105429106"></p>
+<pre><code class="shell">#因为设置了通过容器连接网络，所以01是连通的
 [root@lele ~]# docker exec -it tomcat01 ping 192.168.0.2
 PING 192.168.0.2 (192.168.0.2) 56(84) bytes of data.
 64 bytes from 192.168.0.2: icmp_seq=1 ttl=64 time=0.126 ms
@@ -721,9 +721,9 @@ Error: No such container: tomcat02
 <h3 id="实战-部署Redis集群"><a href="#实战-部署Redis集群" class="headerlink" title="实战:部署Redis集群"></a>实战:部署Redis集群</h3><blockquote>
 <p>三主三从，加入主机r-m3停掉了，从机就需要顶替上去</p>
 </blockquote>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705110810240.png" alt="image-20200705110810240"></p>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200705110810240.png" alt="image-20200705110810240"></p>
 <p>​        shell脚本</p>
-<pre class=" language-shell"><code class="language-shell">#创建网卡
+<pre><code class="shell">#创建网卡
 docker network create redis --subnet 172.38.0.0/16
 
 #通过脚本创建六个redis配置
@@ -731,7 +731,7 @@ for port in $(seq 1 6); \
 do \
 mkdir -p /home/redis-cluster/redis-${port}/conf
 touch /home/redis-cluster/redis-${port}/conf/redis.conf
-cat << EOF >>/home/redis-cluster/redis-${port}/conf/redis.conf
+cat &lt;&lt; EOF &gt;&gt;/home/redis-cluster/redis-${port}/conf/redis.conf
 port 6379
 bind 0.0.0.0
 cluster-enabled yes
@@ -761,10 +761,10 @@ docker run -p 6376:6379 -p 16376:16379 --name redis-6 \
 # 创建集群配置
 /data # redis-cli --cluster create 172.38.0.11:6379 172.38.0.12:6379 172.38.0.13:6379 172.38.0.14:6379 172.38.0.15:6379 172.38.0.16:6379 --clu
 ster-replicas 1
->>> Performing hash slots allocation on 6 nodes...
-Master[0] -> Slots 0 - 5460
-Master[1] -> Slots 5461 - 10922
-Master[2] -> Slots 10923 - 16383
+&gt;&gt;&gt; Performing hash slots allocation on 6 nodes...
+Master[0] -&gt; Slots 0 - 5460
+Master[1] -&gt; Slots 5461 - 10922
+Master[2] -&gt; Slots 10923 - 16383
 Adding replica 172.38.0.15:6379 to 172.38.0.11:6379
 Adding replica 172.38.0.16:6379 to 172.38.0.12:6379
 Adding replica 172.38.0.14:6379 to 172.38.0.13:6379
@@ -780,13 +780,13 @@ S: 73722e254fe02d6aa0ded4175d09ef91a7d697c0 172.38.0.15:6379
    replicates da32ed29f8046d767427f2fb57937e6a6f8fadec
 S: bfd97c50b9cc404d34ed4f55a21259fa66f6a7d3 172.38.0.16:6379
    replicates 825fb8d6b06068f62745e01c797d83e836f91feb
-Can I set the above configuration? (type 'yes' to accept): yes
->>> Nodes configuration updated
->>> Assign a different config epoch to each node
->>> Sending CLUSTER MEET messages to join the cluster
+Can I set the above configuration? (type &#39;yes&#39; to accept): yes
+&gt;&gt;&gt; Nodes configuration updated
+&gt;&gt;&gt; Assign a different config epoch to each node
+&gt;&gt;&gt; Sending CLUSTER MEET messages to join the cluster
 Waiting for the cluster to join
 ...
->>> Performing Cluster Check (using node 172.38.0.11:6379)
+&gt;&gt;&gt; Performing Cluster Check (using node 172.38.0.11:6379)
 M: da32ed29f8046d767427f2fb57937e6a6f8fadec 172.38.0.11:6379
    slots:[0-5460] (5461 slots) master
    1 additional replica(s)
@@ -806,15 +806,15 @@ S: 4620497aa894cf2fe55a9d5211a09dfc43fb01a9 172.38.0.14:6379
    slots: (0 slots) slave
    replicates dfe2d4e5e7b6abc005b13a66ccdc12b5954b27c5
 [OK] All nodes agree about slots configuration.
->>> Check for open slots...
->>> Check slots coverage...
+&gt;&gt;&gt; Check for open slots...
+&gt;&gt;&gt; Check slots coverage...
 [OK] All 16384 slots covered.
 </code></pre>
 <p>docker搭建redis集群完成</p>
 <blockquote>
 <p>主机停掉，从机自动配置上去代替主机。</p>
 </blockquote>
-<p><img src="C:%5CUsers%5C22529%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20200705114455785.png" alt="image-20200705114455785"></p>
+<p><img src="/2020/07/14/Docker%E7%AC%94%E8%AE%B0/docker%E5%9B%BE%E7%89%87%5Cimage-20200705114455785.png" alt="image-20200705114455785"></p>
 <p>我们使用了docker之后，所有的技术都会慢慢的变得简单起来。</p>
 <h3 id="SpringBoot微服务打包Docker镜像"><a href="#SpringBoot微服务打包Docker镜像" class="headerlink" title="SpringBoot微服务打包Docker镜像"></a>SpringBoot微服务打包Docker镜像</h3><p>1.构建springboot项目</p>
 <p>2.打包应用</p>
